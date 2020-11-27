@@ -1,1 +1,1 @@
-# formulario-inscripcion-repica
+# formulario-inscripcion-capacitadores
