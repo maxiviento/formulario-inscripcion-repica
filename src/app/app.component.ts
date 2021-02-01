@@ -98,6 +98,38 @@ export class AppComponent {
             }
           },
           {
+            key: 'Piso',
+            type: 'input',
+            templateOptions: {
+              label: 'Piso',
+              placeholder: 'Ingrese un piso'
+            }
+          },
+          {
+            key: 'Dpto',
+            type: 'input',
+            templateOptions: {
+              label: 'Dpto.',
+              placeholder: 'Ingrese un Departamento del edificio'
+            }
+          },
+          {
+            key: 'Lote',
+            type: 'input',
+            templateOptions: {
+              label: 'Lote',
+              placeholder: 'Ingrese un lote',
+            }
+          },
+          {
+            key: 'Manzana',
+            type: 'input',
+            templateOptions: {
+              label: 'Manzana',
+              placeholder: 'Ingrese una manzana',
+            }
+          },
+          {
             key: 'CP',
             type: 'input',
             templateOptions: {
@@ -166,6 +198,18 @@ export class AppComponent {
       },
       fieldArray: {
         fieldGroup: [
+          {
+            key: 'Tipo de representante',
+            type: 'select',
+            templateOptions: {
+              label: 'Tipo de representante',
+              options: [
+                {value: 'Presidente', label: 'Presidente'},
+                {value: 'Tesorero', label: 'Tesorero'},
+                {value: 'Secretario', label: 'Secretario'},
+              ]
+            }
+          },
           {
             key: 'Apellido',
             type: 'input',
@@ -243,6 +287,38 @@ export class AppComponent {
             }
           },
           {
+            key: 'Piso',
+            type: 'input',
+            templateOptions: {
+              label: 'Piso',
+              placeholder: 'Ingrese un piso'
+            }
+          },
+          {
+            key: 'Dpto',
+            type: 'input',
+            templateOptions: {
+              label: 'Dpto.',
+              placeholder: 'Ingrese un Departamento del edificio'
+            }
+          },
+          {
+            key: 'Lote',
+            type: 'input',
+            templateOptions: {
+              label: 'Lote',
+              placeholder: 'Ingrese un lote',
+            }
+          },
+          {
+            key: 'Manzana',
+            type: 'input',
+            templateOptions: {
+              label: 'Manzana',
+              placeholder: 'Ingrese una manzana',
+            }
+          },
+          {
             key: 'CP',
             type: 'input',
             templateOptions: {
@@ -316,41 +392,55 @@ export class AppComponent {
             }
           },
           {
-            template: 'Tipo de Actividad a Desarrollar (una o más opciónes)'
+            template: '<h3>Tipo de Actividad a Desarrollar (una o más opciónes)</h3><p>'
           },
           {
             key: 'Aula',
-            type: 'checkbox',
+            type: 'select',
             templateOptions: {
-              label: 'Aula'
+              label: 'Aula',
+              options: [
+                {value: 'Si', label: 'Si'},
+                {value: 'No', label: 'No'},
+              ]
             }
           },
           {
             key: 'Salón de usos múltiples',
-            type: 'checkbox',
+            type: 'select',
             templateOptions: {
-              label: 'Salón de usos múliples'
+              label: 'Salón de usos múliples',
+              options: [
+                {value: 'Si', label: 'Si'},
+                {value: 'No', label: 'No'},
+              ]
             }
           },
           {
             key: 'Taller para Prácticas',
-            type: 'checkbox',
+            type: 'select',
             templateOptions: {
-              label: 'Taller para Prácticas'
+              label: 'Taller para Prácticas',
+              options: [
+                {value: 'Si', label: 'Si'},
+                {value: 'No', label: 'No'},
+              ]
             }
           },
           {
             key: 'Total superficie de la institución',
-            type: 'checkbox',
+            type: 'input',
             templateOptions: {
-              label: 'Total superficie de la institución'
+              label: 'Total superficie de la institución',
+              pattern: '\\d{1,25}'
             }
           },
           {
             key: 'Superficie de las Institución destinada a la Capacitación',
-            type: 'checkbox',
+            type: 'input',
             templateOptions: {
-              label: 'Superficie de las Institución destinada a la Capacitación'
+              label: 'Superficie de las Institución destinada a la Capacitación',
+              pattern: '\\d{1,25}'
             }
           },
         ]
