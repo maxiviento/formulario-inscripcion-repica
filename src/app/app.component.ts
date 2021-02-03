@@ -31,6 +31,7 @@ export class AppComponent {
       key: 'Denominación',
       type: 'no repeat',
       templateOptions: {
+        required: true,
         addText: 'Ingresar Denominación',
       },
       fieldArray: {
@@ -76,6 +77,7 @@ export class AppComponent {
       key: 'Domicilio Legal',
       type: 'no repeat',
       templateOptions: {
+        required: true,
         addText: 'Ingresar datos del domicilio',
       },
       fieldArray: {
@@ -176,7 +178,7 @@ export class AppComponent {
             type: 'input',
             templateOptions:{
               type: 'email',
-              label: 'E-mail',
+              label: 'E-mail (Domicilio Fiscal Electrónico)',
               placeholder: 'Ingrese un E-mail'
             }
           },
@@ -194,6 +196,7 @@ export class AppComponent {
       key: 'Representantes legales',
       type: 'repeat',
       templateOptions: {
+        required: true,
         addText: 'Agregar representante legal',
       },
       fieldArray: {
@@ -251,21 +254,121 @@ export class AppComponent {
       }
     },
     
-
-    //-------------------------------------------------------------------------------------------------------
-
+    //--------------------------------------------------------------------------------------------------------
     {
-      className: 'datos-sedes',
-      template: '<div><h2>Sedes donde se desarrollarán los cursos</h2></div>',
+      className: 'datos-responsable-educativo',
+      template: '<div><h2>Responsable educativo</h2></div>',
     },
     {
-      key: 'Sedes donde se desarrollarán los cursos',
-      type: 'repeat',
+      key: 'Responsable educativo',
+      type: 'no repeat',
       templateOptions: {
-        addText: 'Agregar Sede',
+        required: true,
+        addText: 'Agregar responsable educativo',
       },
       fieldArray: {
         fieldGroup: [
+          {
+            key: 'CUIL',
+            type: 'input',
+            templateOptions: {
+              label: 'CUIL',
+              placeholder: 'Ingrese un CUIL',
+              pattern: '\\d{11}'
+            }
+          },
+          {
+            key: 'Nombre',
+            type: 'input',
+            templateOptions: {
+              label: 'Nombre',
+              placeholder: 'Ingrese un nombre'
+            }
+          },
+          {
+            key: 'Apellido',
+            type: 'input',
+            templateOptions: {
+              label: 'Apellido',
+              placeholder: 'Ingrese un apellido'
+            }
+          }
+        ]
+      }
+    },
+    //--------------------------------------------------------------------------------------------------------
+    {
+      className: 'datos-cursos',
+      template: '<div><h2>Cursos que la institución ofrecerá a partir de su habilitación en la REPICA</h2></div>',
+    },
+    {
+      key: 'Cursos',
+      type: 'repeat',
+      templateOptions: {
+        required: true,
+        addText: 'Agregar curso',
+      },
+      fieldArray: {
+        fieldGroup: [
+          {
+            key: 'Nombre del curso',
+            type: 'input',
+            templateOptions: {
+              label: 'Nombre',
+              placeholder: 'Ingrese el nombre del curso'
+            }
+          },
+          {
+            template: '<h3>Recursos con los que cuenta para su dictado',
+          },
+          {
+            key: 'Equipamiento',
+            type: 'select',
+            templateOptions:{
+              label: 'Equipamiento',
+              options:[
+                {value: 'Si', label: 'Si'},
+                {value: 'No', label: 'No'},
+              ]
+            }
+          },
+          {
+            key: 'Docente asignado',
+            type: 'select',
+            templateOptions:{
+              label: 'Docente asignado',
+              options:[
+                {value: 'Si', label: 'Si'},
+                {value: 'No', label: 'No'},
+              ]
+            }
+          },
+          {
+            key: 'Espacio físico',
+            type: 'select',
+            templateOptions:{
+              label: 'Espacio físico',
+              options:[
+                {value: 'Si', label: 'Si'},
+                {value: 'No', label: 'No'},
+              ]
+            }
+          },
+          {
+            template: '<h3>Sede<h3>'
+          },
+          {
+            key: 'Estado',
+            type: 'select',
+            templateOptions: {
+              label: 'Estado',
+              options: [
+                {value: 'Propio', label: 'Propio'},
+                {value: 'Alquilada', label: 'Alquilada'},
+                {value: 'Cedida', label: 'Cedida'},
+              ]
+            }
+          },
           {
             template: '<h3>Domicilio<h3>'
           },
@@ -350,6 +453,17 @@ export class AppComponent {
               label: 'Departamento',
               placeholder: 'Ingrese un Departamento'
             }
+          },
+          {
+            key: 'Ubicación',
+            type: 'input',
+            templateOptions:{
+              label: 'Coordenadas (Leer abajo instructivo)',
+              placeholder: 'Ingrese unas coordendadas'
+            }
+          },
+          {
+            template: '<ol><li>En tu teléfono o tablet Android, abre la app de Google&nbsp;Maps&nbsp;<img src="//storage.googleapis.com/support-kms-prod/sQ6yr8wryadBQXSDmVu6IHdmNF37Xn8IIBcn" width="auto" height="24" alt="Google&nbsp;Maps" title="Google&nbsp;Maps">.</li><li>Mantén presionada un área del mapa que no esté etiquetada. Aparecerá un marcador rojo.</li><li>Verás las coordenadas en el cuadro de búsqueda en la parte superior.</li><li>Escriba las coordenadas en el cuadro "Coordenadas" Ej: -31.383768,-64.175544</li></ol><p></p>'
           },
           {
             template: '<h3>Responsable<h3>'
@@ -441,66 +555,6 @@ export class AppComponent {
             templateOptions: {
               label: 'Superficie de las Institución destinada a la Capacitación',
               pattern: '\\d{1,25}'
-            }
-          },
-        ]
-      }
-    },
-    //--------------------------------------------------------------------------------------------------------
-    {
-      className: 'datos-cursos',
-      template: '<div><h2>Cursos que la institución ofrecerá a partir de su habilitación en la REPICA</h2></div>',
-    },
-    {
-      key: 'Cursos',
-      type: 'repeat',
-      templateOptions: {
-        addText: 'Agregar curso',
-      },
-      fieldArray: {
-        fieldGroup: [
-          {
-            key: 'Nombre del curso',
-            type: 'input',
-            templateOptions: {
-              label: 'Nombre',
-              placeholder: 'Ingrese el nombre del curso'
-            }
-          },
-          {
-            template: '<h3>Recursos con los que cuenta para su dictado',
-          },
-          {
-            key: 'Equipamiento',
-            type: 'select',
-            templateOptions:{
-              label: 'Equipamiento',
-              options:[
-                {value: 'Si', label: 'Si'},
-                {value: 'No', label: 'No'},
-              ]
-            }
-          },
-          {
-            key: 'Docente asignado',
-            type: 'select',
-            templateOptions:{
-              label: 'Docente asignado',
-              options:[
-                {value: 'Si', label: 'Si'},
-                {value: 'No', label: 'No'},
-              ]
-            }
-          },
-          {
-            key: 'Espacio físico',
-            type: 'select',
-            templateOptions:{
-              label: 'Espacio físico',
-              options:[
-                {value: 'Si', label: 'Si'},
-                {value: 'No', label: 'No'},
-              ]
             }
           },
         ]
