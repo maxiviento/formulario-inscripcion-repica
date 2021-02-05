@@ -1051,7 +1051,7 @@ export class AppComponent {
       doc.setFont('helvetica')
 
       let m = 30;
-      let y = 10;
+      let y = 5;
       let x = 15;
       let i = 0; //
       //var arr:JSON[];
@@ -1076,8 +1076,9 @@ export class AppComponent {
           for (var clave in arr[j]) {
             if (y > 240 && x === 110) {
               doc.addPage();
-              m = 5;
-              y = 0;
+              doc.addImage(img, 'jpg', 0, 0);
+              m = 30;
+              y = 5;
               x = 15;
             }
             i++;
