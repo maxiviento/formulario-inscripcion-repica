@@ -1102,12 +1102,22 @@ export class AppComponent {
             if(texto == 'false'){
               texto = 'No'
             }
-            
+            //si el texto e mas largo que 40 caracteres
+            if (texto.length > 40) {
+              doc.text(texto, x, m + y); //valor
+              doc.line(x, m + y + 1, x + 180, m + y + 1); // linea horizontal
+              doc.setFontSize(8);
+              doc.setDrawColor(60);
+              doc.text(clave, x, m + y + 5); //key
+              i++;
+
+            } else {
             doc.text(texto, x, m + y); //valor
             doc.line(x, m + y + 1, x + 90, m + y + 1); // linea horizontal
             doc.setFontSize(8);
             doc.setDrawColor(60);
             doc.text(clave, x, m + y + 5); //key
+          }
           }
         }
         i = 0;
