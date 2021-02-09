@@ -1055,7 +1055,8 @@ export class AppComponent {
       let x = 15;
       let i = 0; //
       //var arr:JSON[];
-
+      var y_inicial = y;
+      var y_final = y;
       for (let seccion of modelo) {
 
         let arr: any = seccion[1];
@@ -1073,17 +1074,21 @@ export class AppComponent {
           //console.log(reg);
           var res = [];
           var z = 0;
+          var salto_pag = false
           for (var clave in arr[j]) {
-            if (y > 240 && x === 110) {
-              doc.addPage();
-              doc.addImage(img, 'jpg', 0, 0);
-              m = 30;
-              y = 5;
-              x = 15;
-            }
             i++;
             if (i % 2 != 0) { x = 15; y = y + 12; }
             else { x = 110; }
+            if (i % 2 == 0 && y > 240){
+              salto_pag = true
+            }
+            
+            if(i%2==0){
+              y = y_inicial 
+            }else{
+              y = y_final + 5
+            }
+
             doc.setFontSize(10);
             doc.setDrawColor(100);
 
@@ -1102,27 +1107,66 @@ export class AppComponent {
             if(texto == 'false'){
               texto = 'No'
             }
-            //si el texto e mas largo que 40 caracteres
-            if (texto.length > 40) {
-              doc.text(texto, x, m + y); //valor
-              doc.line(x, m + y + 1, x + 180, m + y + 1); // linea horizontal
+            
+            y_inicial = y
+            if(texto.length >= 40){
+              let texto_aux = texto.slice(0,40)
+              doc.text(texto_aux, x, m + y)
+
+              texto = texto.slice(40)
+              do{
+                
+                texto_aux = texto.slice(0,40)
+
+                doc.text(texto_aux, x, m + y + 5)
+           
+                y = y + 5
+                texto = texto.slice(40)
+                if (y > 240) {
+                  doc.addPage();
+                  salto_pag = false
+                  doc.addImage(img, 'jpg', 0, 0);
+                  m = 30;
+                  y = 5;
+                  x = 15;
+                }
+
+              }while(texto.length > 40)
+              if (texto != ""){
+                doc.text(texto, x, m + y + 5)
+                y = y + 5
+              }
+
+              doc.line(x, m + y + 6, x + 90, m + y + 6); // linea horizontal
               doc.setFontSize(8);
               doc.setDrawColor(60);
               doc.text(clave, x, m + y + 5); //key
-              i++;
-
-            } else {
-            doc.text(texto, x, m + y); //valor
-            doc.line(x, m + y + 1, x + 90, m + y + 1); // linea horizontal
-            doc.setFontSize(8);
-            doc.setDrawColor(60);
-            doc.text(clave, x, m + y + 5); //key
-          }
+            }else{
+              doc.text(texto, x, m + y); //valor
+              doc.line(x, m + y + 1, x + 90, m + y + 1); // linea horizontal
+              doc.setFontSize(8);
+              doc.setDrawColor(60);
+              doc.text(clave, x, m + y + 5); //key
+            }
+            
+            if(y_final < y){
+              y_final = y
+            }
           }
         }
+        
         i = 0;
         x = 15;
         y = y + 12;
+
+        if (y > 240) {
+          doc.addPage();
+          salto_pag = false
+          doc.addImage(img, 'jpg', 0, 0);
+          m = 30;
+          y = 5;
+          x = 15;
+        }
       }
       let nombreArchivo = '00000000000';
       nombreArchivo = this.model['Denominación'][0]['CUIT'];
