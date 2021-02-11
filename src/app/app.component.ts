@@ -770,6 +770,7 @@ export class AppComponent {
             key: 'CURSO',
             type: 'select',
             templateOptions: {
+              multiple: true,
               label: 'CURSO',
               options: [],
               valueProp: 'id',
@@ -778,7 +779,7 @@ export class AppComponent {
             expressionProperties: {
               'templateOptions.options': 'formState.selectOptionsData.CURSOS.filter(CURSOS => CURSOS.idTrayecto === model.TRAYECTO)',
               // reset model when updating select options
-              'model.CURSO': `field.templateOptions.options.find(o => o.id === model.CURSO) ? model.CURSO:null`,
+              //'model.CURSO': `field.templateOptions.options.find(o => o.id === model.CURSO) ? model.CURSO:null`,
             },
           },
           {
@@ -1039,11 +1040,10 @@ export class AppComponent {
 
   createPdf() {
 
-    if (this.form.valid) {
+    if (this.form.invalid) {
       let modelo = Object.entries(this.model);
       //
       var doc = new jsPDF('p', 'mm', 'a4');
-       //
       var img = new Image();
       img.src = 'assets/cabecera.jpg';
       doc.addImage(img, 'jpg', 0, 0);
@@ -1054,12 +1054,19 @@ export class AppComponent {
       let y = 5;
       let x = 15;
       let i = 0; //
+      let ll = 90;
       //var arr:JSON[];
-      var y_inicial = y;
-      var y_final = y;
+
       for (let seccion of modelo) {
 
         let arr: any = seccion[1];
+        if (y > 240 ) {
+          doc.addPage();
+          doc.addImage(img, 'jpg', 0, 0);
+          m = 30;
+          y = 5;
+          x = 15;
+        }
 
         y = y + 6;
         doc.setFontSize(16);
@@ -1067,31 +1074,13 @@ export class AppComponent {
         doc.text(seccion[0], x, m + y); //nombre seccion
         doc.line(x, m + y + 1, x + 180, m + y + 1);
 
-
-
         for (var j = 0; j < arr.length; j++) {
 
           //console.log(reg);
           var res = [];
           var z = 0;
-          var salto_pag = false
           for (var clave in arr[j]) {
             i++;
-            if (i % 2 != 0) { x = 15; y = y + 12; }
-            else { x = 110; }
-            if (i % 2 == 0 && y > 240){
-              salto_pag = true
-            }
-            
-            if(i%2==0){
-              y = y_inicial 
-            }else{
-              y = y_final + 5
-            }
-
-            doc.setFontSize(10);
-            doc.setDrawColor(100);
-
             res.push([clave, arr[j][clave]]);
             var registro: String[] = [clave, 'algo quee no se paso a string'];
             try {
@@ -1100,73 +1089,59 @@ export class AppComponent {
               console.log(e)
             }
             z++;
-            var texto: string = String(registro[1])
-            if(texto == 'true'){
-              texto = 'Si'
-            }
-            if(texto == 'false'){
-              texto = 'No'
-            }
-            
-            y_inicial = y
-            if(texto.length >= 40){
-              let texto_aux = texto.slice(0,40)
-              doc.text(texto_aux, x, m + y)
+            var texto = ''
+            //RESUELVO SI EL TEXTO ES LARGO O CORTO O SI ES DE UNA COLUMNA U OTRA
+            //console.log(registro[1])
+            texto = registro[1].toString()
 
-              texto = texto.slice(40)
-              do{
-                
-                texto_aux = texto.slice(0,40)
-
-                doc.text(texto_aux, x, m + y + 5)
-           
-                y = y + 5
-                texto = texto.slice(40)
-                if (y > 240) {
-                  doc.addPage();
-                  salto_pag = false
-                  doc.addImage(img, 'jpg', 0, 0);
-                  m = 30;
-                  y = 5;
-                  x = 15;
-                }
-
-              }while(texto.length > 40)
-              if (texto != ""){
-                doc.text(texto, x, m + y + 5)
-                y = y + 5
+            var text_arr_aux = new Array
+            text_arr_aux = []
+            text_arr_aux = texto.split("",texto.length)
+            console.log(texto)
+            console.log(text_arr_aux)
+            var text_arr = new Array
+            text_arr = []
+            var texto_aux = ""
+            for(var jj = 0; jj < text_arr_aux.length; jj++){
+              texto_aux = texto_aux + text_arr_aux[jj]
+              if(jj%115==0 && jj != 0){
+                text_arr.push(texto_aux)
+                texto_aux = ""
               }
-
-              doc.line(x, m + y + 6, x + 90, m + y + 6); // linea horizontal
-              doc.setFontSize(8);
-              doc.setDrawColor(60);
-              doc.text(clave, x, m + y + 5); //key
-            }else{
-              doc.text(texto, x, m + y); //valor
-              doc.line(x, m + y + 1, x + 90, m + y + 1); // linea horizontal
-              doc.setFontSize(8);
-              doc.setDrawColor(60);
-              doc.text(clave, x, m + y + 5); //key
+            }
+            text_arr.push(texto_aux)
+            console.log(texto_aux)
+            
+            
+            if (texto.length > 40) {x = 15; y = y + 12; i++; ll=180}
+            else { if (i % 2 != 0 || ll==180 ) { x = 15; y = y + 12; ll=90 }
+                  else { x = 110; ll=90 } }
+            //ACA PREGUNTO SI ESTOY SALIENDOME DE LA HOJA
+            if (y > 240) {
+              doc.addPage();
+              doc.addImage(img, 'jpg', 0, 0);
+              m = 30;
+              y = 5;
+              x = 15;
             }
             
-            if(y_final < y){
-              y_final = y
+            doc.setFontSize(10);
+            doc.setDrawColor(100);
+            for (var ia = 0; ia < text_arr.length; ia++) {                
+              doc.text(text_arr[ia], x, m + y); //valor
+              y = y + 5             
             }
+            y = y - 5
+            
+            doc.line(x, m + y + 1, x + ll, m + y + 1); // linea horizontal
+            doc.setFontSize(8);
+            doc.setDrawColor(60);
+            doc.text(clave, x, m + y + 5); //key
           }
         }
-        
         i = 0;
         x = 15;
         y = y + 12;
-
-        if (y > 240) {
-          doc.addPage();
-          salto_pag = false
-          doc.addImage(img, 'jpg', 0, 0);
-          m = 30;
-          y = 5;
-          x = 15;
-        }
       }
       let nombreArchivo = '00000000000';
       nombreArchivo = this.model['Denominación'][0]['CUIT'];
@@ -1177,8 +1152,8 @@ export class AppComponent {
     } else (error) => {
       console.error('error:', error);
     }
-    if (this.form.invalid) {
-      alert("falta completar datos")
-    }
+    //if (this.form.invalid) {
+    //  alert("Algunos datos obligatorios son necesarios")
+    //}
   }
 }
